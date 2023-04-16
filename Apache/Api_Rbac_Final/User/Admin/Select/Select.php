@@ -1,0 +1,25 @@
+<?php
+
+require_once("../../../Config/pdo.php");
+require_once("../../../Response/Response.php");
+$res = new Response();
+
+try {
+
+    $select_user = $pdo->prepare("SELECT * FROM user INNER JOIN user_data 
+    on user.UserKey = user_data.UserKey");
+ 
+    $select_user->execute();
+    $rowUser = $select_user->fetchALL(PDO::FETCH_ASSOC);
+    $count = (count($rowUser));
+        if ($count > 0) {
+            $res->getData($count,$rowUser);
+        } else {
+            $res->Message("Error Not Found User");
+        }
+    
+
+} catch (PDOException $e) {
+    $res->Message($e,404);
+}
+?>
